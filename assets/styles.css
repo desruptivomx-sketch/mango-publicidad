@@ -44,6 +44,8 @@ body {
 }
 
 img, svg { display: block; max-width: 100%; height: auto; }
+body { overflow-x: hidden; }
+@supports (overflow: clip) { body { overflow-x: clip; } }
 a { color: inherit; }
 h1, h2, h3, p { margin: 0; }
 
@@ -99,11 +101,11 @@ h3 {
   font: inherit; font-size: 1rem; font-weight: 700; font-stretch: 108%; line-height: 1.1;
   text-decoration: none;
   cursor: pointer;
-  transition: transform .15s ease;
+  transition: transform .25s cubic-bezier(.2, .8, .2, 1);
 }
 .btn svg { width: 1.2em; height: 1.2em; flex: none; }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
+.btn { transform: translate3d(var(--mx, 0px), var(--my, 0px), 0); }
+.btn:active { transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(.96); }
 .btn-ink { background: var(--tinta); color: var(--papel); }
 .btn-mango { background: var(--mango); border-color: var(--mango); color: var(--tinta); }
 .btn-sm { min-height: 42px; padding: .55em 1.05em; font-size: .9375rem; }
@@ -118,7 +120,14 @@ h3 {
 .link-light { color: var(--papel); }
 
 /* ---------- Encabezado ---------- */
-.site-header { position: relative; z-index: 5; background: var(--papel); }
+.site-header {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--papel);
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .2s ease;
+}
+.site-header.is-scrolled { box-shadow: 0 2px 0 var(--tinta); }
+.site-header.is-hidden { transform: translateY(-104%); }
+html { scroll-padding-top: 84px; }
 .header-inner { display: flex; align-items: center; gap: 32px; min-height: 76px; }
 .brand img { width: auto; height: 38px; }
 .nav { display: flex; gap: 28px; margin: 0 0 0 auto; padding: 0; list-style: none; }
@@ -277,8 +286,19 @@ h3 {
   from { font-stretch: 62%; }
   to   { font-stretch: 125%; }
 }
-.lona.is-tensando { animation: tensar 1s cubic-bezier(.2, .8, .2, 1) both; }
-.lona.is-tensando .lona-text { animation: estirar 1.25s .1s cubic-bezier(.2, .8, .2, 1) both; }
+.lona.is-live { animation: mecer 7s 1s ease-in-out infinite alternate both, tensar 1s cubic-bezier(.2, .8, .2, 1); }
+.lona.is-live.is-flap { animation: mecer 7s 1s ease-in-out infinite alternate both, aletear .7s cubic-bezier(.2, .8, .2, 1); }
+.lona.is-live .lona-text { animation: estirar 1.25s .1s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes mecer {
+  from { transform: rotate(-.4deg); }
+  to   { transform: rotate(.4deg); }
+}
+@keyframes aletear {
+  0%   { transform: none; }
+  25%  { transform: rotate(-1.4deg) skewX(-2deg) scaleY(.97); }
+  55%  { transform: rotate(.9deg) skewX(1.5deg) scaleY(1.01); }
+  100% { transform: none; }
+}
 
 /* Debajo de la lona */
 .hero-bottom {
@@ -529,6 +549,220 @@ input:focus-visible, textarea:focus-visible { outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .lona, .fab, .btn, .chip { transition: none; }
-  .lona.is-tensando, .lona.is-tensando .lona-text { animation: none; }
-  .btn:hover { transform: none; }
+  .lona.is-live, .lona.is-live .lona-text { animation: none; }
+}
+
+
+/* =====================================================================
+   Efectos: mangos reales flotando, cintas, revelados, partículas, jugo
+   ===================================================================== */
+
+/* Barra de progreso de lectura */
+.progreso { position: fixed; inset: 0 0 auto; z-index: 60; height: 4px; pointer-events: none; }
+.progreso span {
+  display: block; height: 100%;
+  background: var(--mango);
+  box-shadow: 0 1px 0 var(--tinta);
+  transform: scaleX(0); transform-origin: 0 50%;
+}
+
+/* ---------- Mangos flotantes ---------- */
+.floaters { position: absolute; inset: 0; pointer-events: none; }
+.hero, .servicios, .activaciones, .sports, .contacto { position: relative; }
+.servicios, .activaciones, .contacto { overflow-x: clip; }
+.sports { overflow: clip; }
+.lona-stage > .floaters { z-index: 1; }
+.lona-stage > .floaters-front { z-index: 4; }
+.lona { z-index: 2; }
+.hero-copy { position: relative; }
+.hero-bottom { position: relative; z-index: 3; }
+.floaters-copy { inset: 0 auto auto 0; width: 100%; height: 100%; z-index: -1; }
+
+.fl {
+  position: absolute;
+  width: var(--w, 200px);
+  left: var(--l, auto); right: var(--r, auto); top: var(--t, auto); bottom: var(--b, auto);
+  will-change: transform;
+}
+.fl-front { z-index: 3; }
+.fl-drop { transform-origin: 50% 60%; }
+.fl-img {
+  width: 100%; height: auto;
+  transform: rotate(var(--rot, 0deg));
+  filter: drop-shadow(var(--shx, 16px) var(--shy, 22px) 0 rgba(112, 58, 0, .24));
+  animation: flotar var(--dur, 7s) var(--fd, 0s) ease-in-out infinite alternate;
+}
+.fl-back .fl-img { --shx: 10px; --shy: 14px; }
+.fl-blur .fl-img { filter: blur(var(--bl, 1.6px)) drop-shadow(8px 12px 0 rgba(112, 58, 0, .18)); }
+.fl-glow .fl-img { filter: drop-shadow(0 0 36px rgba(252, 164, 10, .38)) drop-shadow(0 24px 30px rgba(0, 0, 0, .55)); }
+
+@keyframes flotar {
+  from { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  to   { transform: translateY(var(--amp, -18px)) rotate(calc(var(--rot, 0deg) + var(--sw, 6deg))); }
+}
+/* Entrada: en el hero caen del cielo y rebotan; en otras secciones aparecen con impulso */
+@keyframes caer {
+  0%   { transform: translateY(-120vh) rotate(-170deg); animation-timing-function: cubic-bezier(.45, 0, .8, .4); }
+  62%  { transform: translateY(16px) rotate(8deg); animation-timing-function: cubic-bezier(.2, .7, .4, 1); }
+  80%  { transform: translateY(-10px) rotate(-3deg); }
+  100% { transform: none; }
+}
+@keyframes entrar {
+  from { opacity: 0; transform: scale(.25) rotate(-70deg); }
+  to   { opacity: 1; transform: none; }
+}
+.js .fl-drop { opacity: 0; }
+.js .is-seen .fl-drop { opacity: 1; animation: entrar .9s var(--d, 0s) cubic-bezier(.2, 1.5, .4, 1) both; }
+.js:not(.is-ready) .hero .fl-drop { opacity: 0; animation: none; }
+.js.is-ready .hero .fl-drop { opacity: 1; animation: caer 1.25s var(--d, 0s) both; }
+.is-off .fl-img, .is-off .flag, .is-off .gota { animation-play-state: paused; }
+
+/* Posiciones: hero (relativas al escenario de la lona) */
+.fl-a { --w: 230px; --r: -112px; --t: -6px; --rot: 16deg; --d: .25s; --dur: 6.4s; --fd: -1s; }
+.fl-b { --w: 250px; --l: -150px; --t: 246px; --rot: -16deg; --d: .35s; --dur: 7.6s; --fd: -3s; --sw: -6deg; }
+.fl-c { --w: 150px; --l: -36px; --t: -6px; --rot: -26deg; --d: .05s; --dur: 8.2s; --fd: -2s; }
+.fl-d { --w: 250px; --r: -168px; --t: 338px; --rot: -12deg; --d: .15s; --dur: 9s; --fd: -4s; }
+.fl-g { --w: 130px; --l: 63%; --t: -18px; --rot: 8deg; --d: 0s; --dur: 10s; --bl: 2.2px; }
+.fl-e { --w: 190px; --l: 10px; --t: 210px; --rot: 12deg; --d: .55s; --dur: 6.8s; --fd: -2s; }
+.fl-f { --w: 230px; --l: 190px; --t: 280px; --rot: -14deg; --d: .45s; --dur: 8.6s; --fd: -5s; --bl: 1.4px; }
+/* Otras secciones */
+.servicios > .wrap { position: relative; }
+.fl-sv { --w: 250px; --r: 2%; --t: -10px; --rot: -10deg; --dur: 7.4s; }
+.fl-act { --w: 128px; --r: -38px; --t: -62px; --rot: 18deg; --dur: 6.2s; --d: .3s; }
+.act-figure { position: relative; }
+.fl-s1 { --w: 230px; --l: 47%; --t: 9%; --rot: -18deg; --dur: 8s; --bl: 0px; }
+.fl-s2 { --w: 210px; --r: 3%; --b: 6%; --rot: 22deg; --dur: 6.6s; --fd: -2s; --d: .25s; }
+.fl-k1 { --w: 150px; --r: 5%; --t: -64px; --rot: -14deg; --dur: 6.8s; }
+.fl-k2 { --w: 200px; --l: -56px; --b: 40px; --rot: 26deg; --dur: 8.4s; --fd: -3s; --d: .2s; }
+
+@media (max-width: 899px) {
+  .fl-e, .fl-f, .fl-g, .fl-sv { display: none; }
+  .fl-s1 { --w: 150px; --l: auto; --r: -24px; --t: auto; --b: 34%; }
+  .fl-s2 { --w: 150px; --r: auto; --l: -34px; --b: 4%; }
+  .fl-k2 { display: none; }
+}
+@media (max-width: 599px) {
+  .fl-a { --w: 92px; --r: -30px; --t: -26px; }
+  .fl-b { --w: 104px; --l: -34px; --t: auto; --b: 8px; }
+  .fl-c { --w: 64px; --l: -10px; --t: -34px; }
+  .fl-d { --w: 116px; --r: -52px; --t: auto; --b: 0; }
+  .fl-act { --w: 84px; --r: -10px; --t: -44px; }
+  .fl-k1 { --w: 92px; --r: -14px; --t: -48px; }
+}
+
+/* ---------- Cintas cruzadas ---------- */
+.cintas {
+  position: relative; z-index: 6;
+  height: 210px;
+  margin-block: -105px -105px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.cinta {
+  position: absolute; left: -6%; width: 112%; top: 50%;
+  height: 68px;
+  display: flex; align-items: center;
+  overflow: hidden;
+}
+.cinta-a { background: var(--tinta); color: var(--mango); transform: translateY(-50%) rotate(-3deg); }
+.cinta-b { background: var(--papel); color: var(--tinta); transform: translateY(-50%) rotate(2.2deg); box-shadow: 0 0 0 3px var(--tinta); }
+.cinta-track { display: flex; flex: none; will-change: transform; }
+.cinta-set {
+  display: flex; flex: none; align-items: center; gap: 26px;
+  padding-right: 26px;
+  font-size: 1.875rem; font-weight: 900; font-stretch: 125%;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.cinta-set img { width: auto; height: 48px; flex: none; }
+@media (max-width: 599px) {
+  .cintas { height: 150px; margin-block: -75px -75px; }
+  .cinta { height: 50px; }
+  .cinta-set { gap: 16px; padding-right: 16px; font-size: 1.25rem; }
+  .cinta-set img { height: 34px; }
+}
+
+/* ---------- Revelados al hacer scroll ---------- */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(34px) rotate(var(--rr, 0deg));
+  transition: opacity .8s cubic-bezier(.2, .8, .2, 1), transform .8s cubic-bezier(.2, .8, .2, 1);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+.serv[data-reveal]:nth-child(odd) { --rr: -2deg; }
+.serv[data-reveal]:nth-child(even) { --rr: 2deg; }
+
+.js .titular { opacity: 0; }
+.js .titular.is-in { animation: titularIn 1s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes titularIn {
+  from { opacity: 0; font-stretch: 62%; letter-spacing: .04em; transform: translateY(24px); }
+  to   { opacity: 1; font-stretch: 125%; letter-spacing: -.02em; transform: none; }
+}
+
+/* Íconos de servicios: aparecen con rebote y se animan al pasar el cursor */
+.js .serv[data-reveal] .ic { transform: scale(.4) rotate(-20deg); transition: transform .9s cubic-bezier(.2, 1.6, .4, 1); transition-delay: calc(var(--i, 0) * 90ms + 150ms); }
+.js .serv[data-reveal].is-in .ic { transform: none; }
+.serv .ic { transform-origin: 50% 70%; }
+@media (hover: hover) {
+  .serv:hover .ic-lona, .serv:hover .ic-banderola { animation: ondear .9s ease-in-out infinite alternate; }
+  .serv:hover .ic-carpa { animation: brinco .6s cubic-bezier(.2, 1.6, .4, 1) infinite alternate; }
+  .serv:hover .ic-playera, .serv:hover .ic-jersey { animation: girito 1s ease-in-out infinite alternate; }
+  .serv:hover .ic-gorra { animation: gorrazo .7s ease-in-out infinite alternate; }
+}
+@keyframes ondear { from { transform: skewY(-4deg) rotate(-3deg); } to { transform: skewY(4deg) rotate(3deg); } }
+@keyframes brinco { from { transform: translateY(0); } to { transform: translateY(-10px) scale(1.04); } }
+@keyframes girito { from { transform: rotate(-8deg); } to { transform: rotate(8deg) scale(1.05); } }
+@keyframes gorrazo { from { transform: rotate(0); } to { transform: rotate(-14deg) translateY(-6px); } }
+
+/* Banderolas que ondean en la ilustración */
+.flag { transform-box: fill-box; animation: bandera 2.4s ease-in-out infinite alternate; }
+.flag-l { transform-origin: 0% 50%; }
+.flag-r { transform-origin: 100% 50%; animation-delay: -1.2s; }
+@keyframes bandera {
+  from { transform: skewY(-3deg) scaleX(1); }
+  to   { transform: skewY(3deg) scaleX(.9); }
+}
+
+/* Jersey en 3D */
+.jersey { animation: balanceo 6s ease-in-out infinite alternate; }
+.jersey-tilt { transition: transform .5s cubic-bezier(.2, .8, .2, 1); transform-style: preserve-3d; will-change: transform; }
+.jersey-tilt svg { filter: drop-shadow(0 30px 40px rgba(252, 164, 10, .22)); }
+@keyframes balanceo { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-12px) rotate(2deg); } }
+.sports-copy, .jersey { position: relative; z-index: 2; }
+
+/* Proceso: la línea se dibuja y los números aparecen con rebote */
+.js .pasos::before { transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.4s cubic-bezier(.6, 0, .2, 1) .2s; }
+.js .pasos.is-in::before { transform: scaleX(1); }
+.js .pasos li::before { transform: scale(0); transition: transform .7s cubic-bezier(.2, 1.7, .4, 1); transition-delay: calc(var(--i, 0) * 280ms + 250ms); }
+.js .pasos li.is-in::before { transform: none; }
+
+/* Pie: gotas de jugo de mango */
+.site-footer { position: relative; padding-top: clamp(130px, 14vw, 210px); }
+.jugo { position: absolute; top: -2px; left: 0; width: 100%; height: clamp(110px, 12vw, 180px); pointer-events: none; }
+.gota { transform-box: fill-box; transform-origin: 50% 0; animation: gotear var(--gt, 3s) var(--gd, 0s) cubic-bezier(.55, 0, .9, .45) infinite; }
+@keyframes gotear {
+  0%   { transform: translateY(-6px) scale(.4); opacity: 0; }
+  14%  { transform: translateY(0) scale(1); opacity: 1; }
+  78%  { transform: translateY(30px) scale(1, 1.15); opacity: 1; }
+  100% { transform: translateY(40px) scale(.6); opacity: 0; }
+}
+.creditos { grid-column: 1 / -1; color: rgba(255, 255, 255, .66); font-size: .8125rem; }
+.creditos summary { cursor: pointer; font-weight: 600; color: rgba(255, 255, 255, .8); }
+.creditos p, .creditos ul { margin: 10px 0 0; max-width: 90ch; }
+.creditos ul { padding-left: 1.2em; }
+.creditos a { color: rgba(255, 255, 255, .9); }
+
+/* Partículas: estallido y lluvia de mangos */
+.particulas { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.particula { position: absolute; left: 0; top: 0; height: auto; will-change: transform, opacity; filter: drop-shadow(4px 6px 0 rgba(0, 0, 0, .18)); }
+
+/* ---------- Movimiento reducido: todo quieto y visible ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fl-img, .flag, .gota, .jersey { animation: none !important; }
+  .js .fl-drop, .js.is-ready .hero .fl-drop, .js .is-seen .fl-drop { opacity: 1 !important; animation: none !important; }
+  .js [data-reveal], .js .titular, .js .serv[data-reveal] .ic, .js .pasos li::before { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+  .js .pasos::before { transform: none; transition: none; }
+  .site-header { transition: none; }
+  .particulas { display: none; }
 }

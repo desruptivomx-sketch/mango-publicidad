@@ -52,6 +52,7 @@
   </script>
 </head>
 <body>
+  <div class="progreso" aria-hidden="true"><span id="progreso"></span></div>
   <a class="skip" href="#contenido">Saltar al contenido</a>
 
   <header class="site-header">
@@ -67,7 +68,7 @@
           <li><a href="#contacto">Contacto</a></li>
         </ul>
       </nav>
-      <a class="btn btn-ink btn-sm" href="https://wa.me/529903917701" data-wa="Hola, Mango Publicidad. Quiero una cotización." target="_blank" rel="noopener">
+      <a data-burst class="btn btn-ink btn-sm" href="https://wa.me/529903917701" data-wa="Hola, Mango Publicidad. Quiero una cotización." target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.9 3 3 6.6 3 11c0 2.3 1.1 4.4 2.9 5.8L5.2 21l4.4-2.3c.8.2 1.6.3 2.4.3 5.1 0 9-3.6 9-8s-3.9-8-9-8z"/></svg>
         <span><span class="hide-sm">Cotiza por </span>WhatsApp</span>
       </a>
@@ -76,9 +77,14 @@
 
   <main id="contenido">
     <!-- Hero: la lona -->
-    <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <section class="hero" id="inicio" aria-labelledby="hero-title" data-anim>
       <div class="wrap">
         <div class="lona-stage" id="lonaStage">
+          <div class="floaters" aria-hidden="true">
+<div class="fl fl-back fl-c" data-depth="-0.35"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-cuadritos.webp" width="358" height="506" alt="" decoding="async"></div></div>
+<div class="fl fl-back fl-g fl-blur" data-depth="-0.2"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-clasico.webp" width="820" height="629" alt="" decoding="async"></div></div>
+<div class="fl fl-back fl-d" data-depth="-0.45"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-amarillo.webp" width="820" height="401" alt="" decoding="async"></div></div>
+          </div>
           <div class="lona" id="lona" data-scheme="blanca">
             <span class="cord cord-l" aria-hidden="true"></span>
             <span class="cord cord-r" aria-hidden="true"></span>
@@ -93,12 +99,20 @@
             <div class="cota cota-w" aria-hidden="true"><span id="cotaW">3 m</span></div>
             <div class="cota cota-h" aria-hidden="true"><span id="cotaH">1 m</span></div>
           </div>
+          <div class="floaters floaters-front" aria-hidden="true">
+<div class="fl fl-front fl-a" data-depth="0.9"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-rojo.webp" width="820" height="567" alt="" decoding="async"></div></div>
+<div class="fl fl-front fl-b" data-depth="1"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-mitad.webp" width="692" height="597" alt="" decoding="async"></div></div>
+          </div>
         </div>
 
         <div class="hero-bottom">
           <div class="hero-copy">
             <p class="lead">Diseño e impresión de lonas, carpas, banderolas, playeras y gorras para negocios, eventos y equipos de Mérida, Yucatán.</p>
             <a class="link" href="#servicios">Ver todo lo que imprimimos</a>
+            <div class="floaters floaters-copy" aria-hidden="true">
+<div class="fl fl-back fl-f fl-blur" data-depth="-0.4"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-moteado.webp" width="820" height="556" alt="" decoding="async"></div></div>
+<div class="fl fl-front fl-e" data-depth="0.7"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-cuadritos-2.webp" width="372" height="478" alt="" decoding="async"></div></div>
+            </div>
           </div>
 
           <form class="orden" id="lonaForm" aria-labelledby="orden-title" onsubmit="return false">
@@ -139,7 +153,7 @@
             </fieldset>
 
             <div class="orden-actions">
-              <a class="btn btn-ink" id="lonaCta" href="https://wa.me/529903917701" target="_blank" rel="noopener">
+              <a data-burst class="btn btn-ink" id="lonaCta" href="https://wa.me/529903917701" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3C6.9 3 3 6.6 3 11c0 2.3 1.1 4.4 2.9 5.8L5.2 21l4.4-2.3c.8.2 1.6.3 2.4.3 5.1 0 9-3.6 9-8s-3.9-8-9-8z"/></svg>
                 Cotizar esta lona por WhatsApp
               </a>
@@ -150,17 +164,26 @@
       </div>
     </section>
 
+    <!-- Cintas -->
+    <div class="cintas" aria-hidden="true" data-anim>
+      <div class="cinta cinta-a"><div class="cinta-track" data-dir="1"><div class="cinta-set"><span>Lonas</span><img src="assets/mangos/mango-rojo-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Carpas 3 × 3 m</span><img src="assets/mangos/mango-cuadritos-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Banderolas</span><img src="assets/mangos/mango-amarillo-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Playeras full print</span><img src="assets/mangos/mango-mitad-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Gorras con bordado 3D</span><img src="assets/mangos/mango-moteado-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Uniformes deportivos</span><img src="assets/mangos/mango-entero-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"></div></div></div>
+      <div class="cinta cinta-b"><div class="cinta-track" data-dir="-1"><div class="cinta-set"><span>Todo en publicidad</span><img src="assets/mangos/mango-clasico-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Mérida, Yucatán</span><img src="assets/mangos/mango-cuadritos-2-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Cotiza por WhatsApp</span><img src="assets/mangos/mango-vertical-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"><span>Mango Sports</span><img src="assets/mangos/mango-rojo-sm.webp" alt="" width="220" height="150" loading="lazy" decoding="async"></div></div></div>
+    </div>
+
     <!-- Servicios -->
-    <section class="servicios" id="servicios" aria-labelledby="servicios-title">
+    <section class="servicios" id="servicios" aria-labelledby="servicios-title" data-anim>
       <div class="wrap">
+        <div class="floaters floaters-serv" aria-hidden="true">
+<div class="fl fl-front fl-sv" data-depth="0.6"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-clasico.webp" width="820" height="629" alt="" decoding="async"></div></div>
+        </div>
         <div class="section-head">
-          <h2 id="servicios-title">Lo que imprimimos</h2>
+          <h2 id="servicios-title" class="titular">Lo que imprimimos</h2>
           <p>Desde una lona para tu fachada hasta todo lo que necesitas para un evento. Si todavía no tienes el diseño, lo hacemos contigo.</p>
         </div>
 
-        <ul class="serv-grid">
-          <li class="serv">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
+        <ul class="serv-grid" data-reveal-group>
+          <li class="serv" data-reveal>
+            <svg class="ic ic-lona" viewBox="0 0 120 120" aria-hidden="true">
               <g fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 40 12 16M100 40l8-24"/>
                 <rect x="10" y="34" width="100" height="56" fill="#fff"/>
@@ -176,8 +199,8 @@
             <p>Para fachadas, promociones, eventos e inauguraciones, en la medida que necesites.</p>
             <span class="spec">Gran formato, a tu medida</span>
           </li>
-          <li class="serv">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
+          <li class="serv" data-reveal>
+            <svg class="ic ic-carpa" viewBox="0 0 120 120" aria-hidden="true">
               <g stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M60 18 108 50H12Z" fill="#FCA40A"/>
                 <rect x="12" y="50" width="96" height="16" fill="#000"/>
@@ -190,8 +213,8 @@
             <p>Carpas con estructura reforzada, impresas con tu marca para ferias, stands y activaciones.</p>
             <span class="spec">3 × 3 m</span>
           </li>
-          <li class="serv">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
+          <li class="serv" data-reveal>
+            <svg class="ic ic-banderola" viewBox="0 0 120 120" aria-hidden="true">
               <g stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M44 12c18 0 32 8 34 24l-2 62-32-8Z" fill="#FCA40A"/>
                 <path d="M44 10v98M28 108h32" fill="none"/>
@@ -204,8 +227,8 @@
             <p>Banderolas personalizadas para que tu punto de venta o tu evento se vea desde lejos.</p>
             <span class="spec">Interior y exterior</span>
           </li>
-          <li class="serv">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
+          <li class="serv" data-reveal>
+            <svg class="ic ic-playera" viewBox="0 0 120 120" aria-hidden="true">
               <defs>
                 <clipPath id="clip-playera">
                   <path d="M44 18l10 4q6 6 12 0l10-4 26 14-8 18-10-5v57H36V45l-10 5-8-18Z"/>
@@ -221,8 +244,8 @@
             <p>Impresas de costura a costura con tu diseño, también en manga larga y tela dryfit.</p>
             <span class="spec">Manga corta o larga, dryfit</span>
           </li>
-          <li class="serv">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
+          <li class="serv" data-reveal>
+            <svg class="ic ic-gorra" viewBox="0 0 120 120" aria-hidden="true">
               <path d="M18 76c0-30 20-46 44-46s36 18 36 46Z" fill="#000"/>
               <path d="M88 72c12 0 24 2 28 8-4 6-18 6-30 2Z" fill="#000"/>
               <circle cx="62" cy="29" r="3.5" fill="#000"/>
@@ -236,8 +259,8 @@
             <p>Tu logo bordado en relieve para tu equipo, tu staff o tus clientes.</p>
             <span class="spec">Bordado en relieve</span>
           </li>
-          <li class="serv">
-            <svg viewBox="0 0 120 120" aria-hidden="true">
+          <li class="serv" data-reveal>
+            <svg class="ic ic-jersey" viewBox="0 0 120 120" aria-hidden="true">
               <path d="M42 16h12l6 14 6-14h12l24 14-8 20-10-4v58H36V46l-10 4-8-20Z" fill="#000" stroke="#000" stroke-width="3.5" stroke-linejoin="round"/>
               <path d="M54 16l6 14 6-14" fill="none" stroke="#FCA40A" stroke-width="3.5" stroke-linejoin="round"/>
               <text x="60" y="90" text-anchor="middle" fill="#FCA40A" class="svg-num" font-size="38">7</text>
@@ -251,21 +274,28 @@
     </section>
 
     <!-- Activaciones -->
-    <section class="activaciones" id="activaciones" aria-labelledby="act-title">
+    <section class="activaciones" id="activaciones" aria-labelledby="act-title" data-anim>
       <div class="wrap act-grid">
-        <figure class="act-figure">
+        <figure class="act-figure" data-reveal>
+          <div class="floaters" aria-hidden="true">
+<div class="fl fl-front fl-act" data-depth="0.6"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-vertical.webp" width="554" height="820" alt="" decoding="async"></div></div>
+          </div>
           <svg viewBox="0 0 640 430" role="img" aria-labelledby="act-fig-title">
             <title id="act-fig-title">Ilustración de un stand con carpa, lona y dos banderolas con tu marca</title>
             <!-- Banderola izquierda -->
-            <path d="M96 40c30 0 50 14 52 42l-4 262-48-14Z" fill="#000"/>
-            <g transform="translate(98 132) scale(.46)">
-              <path d="M58 14C76 16 88 34 86 56C84 78 70 92 52 92C36 92 28 80 30 68C32 58 38 52 36 40C34 26 42 12 58 14Z" fill="#FCA40A"/>
+            <g class="flag flag-l">
+              <path d="M96 40c30 0 50 14 52 42l-4 262-48-14Z" fill="#000"/>
+              <g transform="translate(98 132) scale(.46)">
+                <path d="M58 14C76 16 88 34 86 56C84 78 70 92 52 92C36 92 28 80 30 68C32 58 38 52 36 40C34 26 42 12 58 14Z" fill="#FCA40A"/>
+              </g>
             </g>
             <path d="M96 36v344M68 380h56" stroke="#000" stroke-width="7" stroke-linecap="round"/>
             <!-- Banderola derecha -->
-            <path d="M544 40c-30 0-50 14-52 42l4 262 48-14Z" fill="#fff" stroke="#000" stroke-width="5" stroke-linejoin="round"/>
-            <g transform="translate(494 132) scale(.46)">
-              <path d="M58 14C76 16 88 34 86 56C84 78 70 92 52 92C36 92 28 80 30 68C32 58 38 52 36 40C34 26 42 12 58 14Z" fill="#FCA40A" stroke="#000" stroke-width="7"/>
+            <g class="flag flag-r">
+              <path d="M544 40c-30 0-50 14-52 42l4 262 48-14Z" fill="#fff" stroke="#000" stroke-width="5" stroke-linejoin="round"/>
+              <g transform="translate(494 132) scale(.46)">
+                <path d="M58 14C76 16 88 34 86 56C84 78 70 92 52 92C36 92 28 80 30 68C32 58 38 52 36 40C34 26 42 12 58 14Z" fill="#FCA40A" stroke="#000" stroke-width="7"/>
+              </g>
             </g>
             <path d="M544 36v344M516 380h56" stroke="#000" stroke-width="7" stroke-linecap="round"/>
             <!-- Carpa -->
@@ -284,27 +314,32 @@
             <path d="M24 380h592" stroke="#000" stroke-width="4" stroke-linecap="round"/>
           </svg>
         </figure>
-        <div class="act-copy">
-          <h2 id="act-title">Todo el kit para tu activación</h2>
+        <div class="act-copy" data-reveal>
+          <h2 id="act-title" class="titular">Todo el kit para tu activación</h2>
           <p>Para KAYO México y KAYO Moto hicimos carpas de 3 × 3 m con estructura reforzada, banderolas, playeras full print de manga larga en dryfit y gorras con bordado 3D.</p>
           <p>Si vas a montar un stand, una exhibición o un evento, lo resolvemos en un solo lugar para que todo salga con la misma imagen.</p>
-          <a class="btn btn-ink" href="https://wa.me/529903917701" data-wa="Hola, Mango Publicidad. Quiero cotizar el material para una activación (carpa, banderolas, lona, playeras o gorras)." target="_blank" rel="noopener">Cotizar mi activación</a>
+          <a data-burst class="btn btn-ink" href="https://wa.me/529903917701" data-wa="Hola, Mango Publicidad. Quiero cotizar el material para una activación (carpa, banderolas, lona, playeras o gorras)." target="_blank" rel="noopener">Cotizar mi activación</a>
         </div>
       </div>
     </section>
 
     <!-- Mango Sports -->
-    <section class="sports" id="sports" aria-labelledby="sports-title">
+    <section class="sports" id="sports" aria-labelledby="sports-title" data-anim>
+      <div class="floaters" aria-hidden="true">
+<div class="fl fl-back fl-s1 fl-glow" data-depth="-0.5"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-moteado.webp" width="820" height="556" alt="" decoding="async"></div></div>
+<div class="fl fl-front fl-s2 fl-glow" data-depth="0.9"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-entero.webp" width="666" height="540" alt="" decoding="async"></div></div>
+      </div>
       <div class="wrap sports-grid">
-        <div class="sports-copy">
-          <h2 id="sports-title">Uniformes para tu equipo, con Mango Sports</h2>
+        <div class="sports-copy" data-reveal>
+          <h2 id="sports-title" class="titular">Uniformes para tu equipo, con Mango Sports</h2>
           <p>Jerseys personalizados con el nombre, el número y los colores de tu equipo. Los Habaneros de softbol ya juegan con los suyos.</p>
           <div class="sports-actions">
-            <a class="btn btn-mango" href="https://wa.me/529903917701" data-wa="Hola, Mango Sports. Quiero cotizar uniformes para mi equipo." target="_blank" rel="noopener">Cotizar uniformes</a>
+            <a data-burst class="btn btn-mango" href="https://wa.me/529903917701" data-wa="Hola, Mango Sports. Quiero cotizar uniformes para mi equipo." target="_blank" rel="noopener">Cotizar uniformes</a>
             <a class="link link-light" href="https://www.facebook.com/MANGO.Sports.Yucatan/" target="_blank" rel="noopener">Ver Mango Sports en Facebook</a>
           </div>
         </div>
-        <figure class="jersey">
+        <figure class="jersey" data-reveal>
+          <div class="jersey-tilt">
           <svg viewBox="0 0 420 460" role="img" aria-labelledby="jersey-title">
             <title id="jersey-title">Jersey color mango visto de espalda, con el nombre del equipo y el número 07</title>
             <path d="M128 44 170 28q40 24 80 0l42 16 88 54-34 74-42-20v272H116V152l-42 20-34-74Z" fill="#FCA40A"/>
@@ -314,6 +349,7 @@
             <text x="210" y="136" text-anchor="middle" fill="#000" class="svg-display" font-size="30">TU EQUIPO</text>
             <text x="210" y="332" text-anchor="middle" fill="#000" stroke="#fff" stroke-width="6" paint-order="stroke" class="svg-num" font-size="168">07</text>
           </svg>
+          </div>
         </figure>
       </div>
     </section>
@@ -322,22 +358,22 @@
     <section class="proceso" id="proceso" aria-labelledby="proceso-title">
       <div class="wrap">
         <div class="section-head">
-          <h2 id="proceso-title">Cómo trabajamos</h2>
+          <h2 id="proceso-title" class="titular">Cómo trabajamos</h2>
         </div>
-        <ol class="pasos">
-          <li>
+        <ol class="pasos" data-reveal-group>
+          <li data-reveal>
             <h3>Cuéntanos qué necesitas</h3>
             <p>Escríbenos por WhatsApp: qué producto, medidas, cantidad y para cuándo lo quieres.</p>
           </li>
-          <li>
+          <li data-reveal>
             <h3>Preparamos tu diseño</h3>
             <p>Si ya tienes logo o arte, lo adaptamos a la medida. Si no, lo diseñamos contigo.</p>
           </li>
-          <li>
+          <li data-reveal>
             <h3>Lo apruebas antes de imprimir</h3>
             <p>Te mandamos cómo va a quedar para que lo revises y pidas los cambios que necesites.</p>
           </li>
-          <li>
+          <li data-reveal>
             <h3>Imprimimos y entregamos</h3>
             <p>Te avisamos cuando tu pedido está listo y coordinamos contigo la entrega.</p>
           </li>
@@ -346,10 +382,14 @@
     </section>
 
     <!-- Contacto -->
-    <section class="contacto" id="contacto" aria-labelledby="contacto-title">
+    <section class="contacto" id="contacto" aria-labelledby="contacto-title" data-anim>
+      <div class="floaters" aria-hidden="true">
+<div class="fl fl-front fl-k1" data-depth="0.8"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-cuadritos-2.webp" width="372" height="478" alt="" decoding="async"></div></div>
+<div class="fl fl-back fl-k2" data-depth="-0.5"><div class="fl-drop"><img class="fl-img" src="assets/mangos/mango-rojo.webp" width="820" height="567" alt="" decoding="async"></div></div>
+      </div>
       <div class="wrap contacto-grid">
-        <div class="contacto-info">
-          <h2 id="contacto-title">Visítanos o escríbenos</h2>
+        <div class="contacto-info" data-reveal>
+          <h2 id="contacto-title" class="titular">Visítanos o escríbenos</h2>
           <address>
             Calle 33 No. 303 x 16-A y 18<br>
             San Pedro Cholul, 97138<br>
@@ -364,7 +404,7 @@
           </ul>
         </div>
 
-        <form class="cotiza" id="cotizaForm" novalidate aria-labelledby="cotiza-title">
+        <form class="cotiza" id="cotizaForm" data-reveal novalidate aria-labelledby="cotiza-title">
           <h3 id="cotiza-title">Pide tu cotización</h3>
           <fieldset class="field">
             <legend>¿Qué necesitas?</legend>
@@ -406,6 +446,7 @@
   </main>
 
   <footer class="site-footer">
+    <svg class="jugo" viewBox="0 0 1440 180" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><path d="M0 0H1440V26H1400C1390 26 1388 30 1388 38V82A18 18 0 0 1 1352 82V38C1352 30 1350 26 1340 26H1237C1227 26 1225 30 1225 38V69A15 15 0 0 1 1195 69V38C1195 30 1193 26 1183 26H1061C1051 26 1049 30 1049 38V91A19 19 0 0 1 1011 91V38C1011 30 1009 26 999 26H906C896 26 894 30 894 38V56A14 14 0 0 1 866 56V38C866 30 864 26 854 26H734C724 26 722 30 722 38V114A22 22 0 0 1 678 114V38C678 30 676 26 666 26H547C537 26 535 30 535 38V63A15 15 0 0 1 505 63V38C505 30 503 26 493 26H362C352 26 350 30 350 38V102A20 20 0 0 1 310 102V38C310 30 308 26 298 26H235C225 26 223 30 223 38V51A13 13 0 0 1 197 51V38C197 30 195 26 185 26H99C89 26 87 30 87 38V69A17 17 0 0 1 53 69V38C53 30 51 26 41 26H0Z" fill="#FCA40A"/><circle class="gota" cx="70" cy="92" r="6.8" style="--gd:0.00s;--gt:2.6s"/><circle class="gota" cx="330" cy="128" r="8" style="--gd:1.46s;--gt:3.8s"/><circle class="gota" cx="700" cy="142" r="8.8" style="--gd:2.92s;--gt:3.2s"/><circle class="gota" cx="1030" cy="116" r="7.6" style="--gd:1.18s;--gt:2.6s"/><circle class="gota" cx="1370" cy="106" r="7.2" style="--gd:2.64s;--gt:3.8s"/></svg>
     <div class="wrap footer-inner">
       <img src="assets/logo-mango-blanco.png" alt="Mango Publicidad" width="720" height="192">
       <ul class="footer-nav">
@@ -415,6 +456,17 @@
         <li><a href="#contacto">Contacto</a></li>
       </ul>
       <p class="legal">Todo en publicidad. © 2026 Mango Publicidad, Mérida, Yucatán.</p>
+      <details class="creditos">
+        <summary>Créditos de las fotos de mangos</summary>
+        <p>Fotos de Wikimedia Commons, recortadas (se quitó el fondo). Los recortes se comparten bajo <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</p>
+        <ul>
+          <li>Ivar Leidus, <a href="https://commons.wikimedia.org/wiki/File:Mangos_-_single_and_halved.jpg" target="_blank" rel="noopener">Mangos, single and halved</a>, <a href="https://commons.wikimedia.org/wiki/File:Mango_-_single.jpg" target="_blank" rel="noopener">Mango, single</a> y <a href="https://commons.wikimedia.org/wiki/File:Mango_fruit_Nam_Dok_Mai.jpg" target="_blank" rel="noopener">Mango fruit Nam Dok Mai</a>, CC BY-SA 4.0</li>
+          <li>HaJunkiyada, <a href="https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Mango.jpg" target="_blank" rel="noopener">Liat Portal for Foodie Disorder, Mango</a>, CC BY-SA 4.0</li>
+          <li>Leo219, <a href="https://commons.wikimedia.org/wiki/File:A_mango_fruit_with_speckled_red_skin.png" target="_blank" rel="noopener">A mango fruit with speckled red skin</a>, CC BY-SA 4.0</li>
+          <li>Ninjatacoshell, <a href="https://commons.wikimedia.org/wiki/File:Mango_on_a_white_background.png" target="_blank" rel="noopener">Mango on a white background</a>, CC BY-SA 3.0</li>
+          <li>Renee Comet, <a href="https://commons.wikimedia.org/wiki/File:Mango_(1).jpg" target="_blank" rel="noopener">Mango (1)</a>, dominio público</li>
+        </ul>
+      </details>
     </div>
   </footer>
 

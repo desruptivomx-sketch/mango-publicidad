@@ -238,16 +238,23 @@
     readSize();
     layout(false);
     const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-    Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))]).then(() => {
+    const heroImgs = [...document.querySelectorAll('.hero .fl-img')];
+    const imgsReady = Promise.all(heroImgs.map((img) => (img.decode ? img.decode().catch(() => {}) : null)));
+    Promise.race([Promise.all([fontsReady, imgsReady]), new Promise((r) => setTimeout(r, 1800))]).then(() => {
       layout(false);
       document.documentElement.classList.add('is-ready');
-      if (!reduce.matches) {
-        lona.classList.add('is-tensando');
-        lona.addEventListener('animationend', (e) => {
-          if (e.target === lona) lona.classList.remove('is-tensando');
-        });
-      }
+      if (!reduce.matches) lona.classList.add('is-live');
     });
+
+    // Aleteo de la lona cuando cambian medida o colores
+    const flap = () => {
+      if (reduce.matches || !lona.classList.contains('is-live')) return;
+      lona.classList.remove('is-flap');
+      void lona.offsetWidth;
+      lona.classList.add('is-flap');
+    };
+    lona.addEventListener('animationend', (e) => { if (e.animationName === 'aletear') lona.classList.remove('is-flap'); });
+    form.addEventListener('change', (e) => { if (e.target.name === 'scheme' || e.target.name === 'size') flap(); });
   }
 
   /* ---------------- Cotización general ---------------- */
@@ -290,6 +297,8 @@
         msg += `\nLo necesito para el ${d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}.`;
       }
       const url = wa(msg);
+      const btn = cForm.querySelector('button[type="submit"]');
+      if (window.mangoBurst && btn) window.mangoBurst(btn);
       const win = window.open(url, '_blank');
       if (win) win.opener = null;
       else window.location.href = url; // si el navegador bloquea la ventana nueva
@@ -310,4 +319,202 @@
   } else if (fab) {
     fab.classList.add('is-visible');
   }
+
+  /* =================================================================
+     Efectos
+     ================================================================= */
+  const root = document.documentElement;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  /* ---------- Partículas: estallido y lluvia de mangos ---------- */
+  const SMALL = ['rojo', 'mitad', 'cuadritos', 'amarillo', 'entero', 'moteado', 'clasico', 'cuadritos-2', 'vertical']
+    .map((n) => `assets/mangos/mango-${n}-sm.webp`);
+  const layer = document.createElement('div');
+  layer.className = 'particulas';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(layer);
+  const parts = [];
+
+  function spawn(o) {
+    if (parts.length > 90) return;
+    const el = document.createElement('img');
+    el.src = pick(SMALL); el.alt = ''; el.className = 'particula'; el.decoding = 'async';
+    el.style.width = `${o.size}px`;
+    layer.appendChild(el);
+    parts.push({ el, age: 0, rot: rand(0, 360), ...o });
+  }
+  function burst(x, y, n = 16) {
+    if (reduce.matches) return;
+    for (let i = 0; i < n; i++) {
+      const a = rand(-Math.PI * 0.94, -Math.PI * 0.06);
+      const v = rand(7, 15);
+      spawn({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, size: rand(30, 64), spin: rand(-14, 14), life: rand(1.1, 1.7), g: 0.5 });
+    }
+  }
+  function rain(n = 36) {
+    if (reduce.matches) return;
+    for (let i = 0; i < n; i++) {
+      spawn({ x: rand(0, innerWidth), y: rand(-innerHeight * 0.9, -60), vx: rand(-0.8, 0.8), vy: rand(2, 6),
+        size: rand(50, 128), spin: rand(-5, 5), life: 4.2, g: 0.2 });
+    }
+  }
+  function stepParticles(dt) {
+    const k = dt * 60;
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.age += dt; p.vy += p.g * k; p.x += p.vx * k; p.y += p.vy * k; p.rot += p.spin * k;
+      const fade = p.age > p.life - 0.35 ? Math.max(0, (p.life - p.age) / 0.35) : 1;
+      p.el.style.opacity = fade.toFixed(2);
+      p.el.style.transform = `translate3d(${(p.x - p.size / 2).toFixed(1)}px, ${(p.y - p.size / 2).toFixed(1)}px, 0) rotate(${p.rot.toFixed(1)}deg)`;
+      if (p.age >= p.life || p.y > innerHeight + 200) { p.el.remove(); parts.splice(i, 1); }
+    }
+  }
+  window.mangoBurst = (el, e) => {
+    const r = el.getBoundingClientRect();
+    const x = e && e.clientX ? e.clientX : r.left + r.width / 2;
+    const y = e && e.clientY ? e.clientY : r.top + r.height / 2;
+    burst(x, y);
+  };
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-burst]');
+    if (el) window.mangoBurst(el, e);
+  });
+  const brand = document.querySelector('.brand');
+  if (brand) brand.addEventListener('click', () => rain());
+
+  /* ---------- Secciones visibles: pausar lo que no se ve ---------- */
+  const visibles = new Set();
+  const secIO = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      en.target.classList.toggle('is-off', !en.isIntersecting);
+      if (en.isIntersecting) { visibles.add(en.target); en.target.classList.add('is-seen'); }
+      else visibles.delete(en.target);
+    });
+  }, { rootMargin: '160px 0px' });
+  document.querySelectorAll('[data-anim]').forEach((s) => secIO.observe(s));
+
+  /* ---------- Revelados ---------- */
+  document.querySelectorAll('[data-reveal-group]').forEach((g) => {
+    g.querySelectorAll(':scope > [data-reveal]').forEach((el, i) => el.style.setProperty('--i', i));
+  });
+  const revIO = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add('is-in'); revIO.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('[data-reveal], .titular, .pasos').forEach((el) => revIO.observe(el));
+
+  /* ---------- Mangos flotantes: profundidad con cursor y scroll ---------- */
+  const floaters = [...document.querySelectorAll('.fl')].map((el) => ({
+    el, depth: parseFloat(el.dataset.depth || '0.5'), sec: el.closest('[data-anim]'),
+  }));
+  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  if (finePointer.matches) {
+    window.addEventListener('pointermove', (e) => {
+      pointer.tx = e.clientX / innerWidth - 0.5;
+      pointer.ty = e.clientY / innerHeight - 0.5;
+    }, { passive: true });
+  }
+
+  /* ---------- Cintas: avanzan solas y aceleran con el scroll ---------- */
+  const tracks = [...document.querySelectorAll('.cinta-track')].map((el) => ({
+    el, dir: parseFloat(el.dataset.dir || '1'), set: el.querySelector('.cinta-set'), w: 0, sec: el.closest('[data-anim]'),
+  }));
+  function fillTracks() {
+    tracks.forEach((t) => {
+      if (!t.set) return;
+      t.w = t.set.offsetWidth;
+      const need = Math.ceil((innerWidth * 1.3) / Math.max(1, t.w)) + 1;
+      while (t.el.children.length < need) t.el.appendChild(t.set.cloneNode(true));
+    });
+  }
+  fillTracks();
+  window.addEventListener('resize', fillTracks);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fillTracks);
+  window.addEventListener('load', fillTracks);
+
+  /* ---------- Botones con imán ---------- */
+  if (finePointer.matches && !reduce.matches) {
+    document.querySelectorAll('.btn').forEach((btn) => {
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        btn.style.setProperty('--mx', `${clamp((e.clientX - (r.left + r.width / 2)) * 0.2, -10, 10)}px`);
+        btn.style.setProperty('--my', `${clamp((e.clientY - (r.top + r.height / 2)) * 0.32, -8, 8)}px`);
+      });
+      btn.addEventListener('pointerleave', () => {
+        btn.style.setProperty('--mx', '0px');
+        btn.style.setProperty('--my', '0px');
+      });
+    });
+  }
+
+  /* ---------- Jersey en 3D siguiendo el cursor ---------- */
+  const tilt = document.querySelector('.jersey-tilt');
+  const sportsSec = document.getElementById('sports');
+  if (tilt && sportsSec && finePointer.matches && !reduce.matches) {
+    sportsSec.addEventListener('pointermove', (e) => {
+      const r = tilt.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+      const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+      tilt.style.transform = `perspective(900px) rotateY(${clamp(dx * 26, -20, 20).toFixed(1)}deg) rotateX(${clamp(-dy * 18, -14, 14).toFixed(1)}deg) scale(1.03)`;
+    });
+    sportsSec.addEventListener('pointerleave', () => { tilt.style.transform = ''; });
+  }
+
+  /* ---------- Encabezado que se esconde al bajar y vuelve al subir ---------- */
+  const header = document.querySelector('.site-header');
+  let lastY = scrollY;
+  const bar = document.getElementById('progreso');
+
+  /* ---------- Un solo ciclo de animación ---------- */
+  let last = performance.now();
+  const t0 = last;
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    const sy = scrollY;
+    const vh = innerHeight;
+
+    if (header) {
+      header.classList.toggle('is-scrolled', sy > 8);
+      if (Math.abs(sy - lastY) > 4) {
+        header.classList.toggle('is-hidden', sy > lastY && sy > 240);
+        lastY = sy;
+      }
+    }
+    if (bar) {
+      const max = root.scrollHeight - vh;
+      bar.style.transform = `scaleX(${max > 0 ? Math.min(1, sy / max).toFixed(4) : 0})`;
+    }
+
+    if (!reduce.matches) {
+      pointer.x += (pointer.tx - pointer.x) * 0.06;
+      pointer.y += (pointer.ty - pointer.y) * 0.06;
+      const rects = new Map();
+      for (const f of floaters) {
+        if (!f.sec || !visibles.has(f.sec)) continue;
+        let r = rects.get(f.sec);
+        if (!r) { r = f.sec.getBoundingClientRect(); rects.set(f.sec, r); }
+        // Desplazamiento normalizado a la pantalla: nunca más de ~60 px aunque la sección sea alta
+        const norm = clamp((r.top + r.height / 2 - vh / 2) / vh, -1.2, 1.2);
+        const tx = pointer.x * f.depth * 36;
+        const ty = norm * f.depth * 60 + pointer.y * f.depth * 26;
+        const rot = norm * f.depth * 9;
+        f.el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg)`;
+      }
+      const tt = (now - t0) / 1000;
+      for (const t of tracks) {
+        if (!t.w || (t.sec && !visibles.has(t.sec))) continue;
+        const d = tt * 60 + sy * 0.5;
+        const m = ((d % t.w) + t.w) % t.w;
+        const x = t.dir > 0 ? -m : m - t.w;
+        t.el.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
+      }
+      if (parts.length) stepParticles(dt);
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
